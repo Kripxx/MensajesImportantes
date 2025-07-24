@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Citación</title>
+    <style>
+        /* Tu mismo estilo CSS que ya tenías en PHP */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f2f6f9, #d9e4f5);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Registrar Citación</h1>
+    <p>Completa los campos para crear una nueva citación.</p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div style="background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('guardar') }}" method="POST">
+        <label for="area_id">Área:</label>
+        <select name="area_id" required>
+            <option value="">Selecciona un área</option>
+            {% for area in areas %}
+               <option value="{{ area.area_id }}">{{ area.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="motivo_id">Motivo:</label>
+        <select name="motivo_id" required>
+            <option value="">Selecciona un motivo</option>
+            {% for motivo in motivos %}
+                <option value="{{ motivo.motivo_id }}">{{ motivo.nombre }}</option>
+            {% endfor %}
+        </select>
+
+         <label for="correo_destino">Correo destinatario:</label>
+        <input type="email" name="correo_destino" required placeholder="ejemplo@dominio.com">
+
+        <label for="asunto">Asunto del correo:</label>
+        <input type="text" name="asunto" required>
+
+        <label for="contenido">Contenido del mensaje:</label>
+        <textarea name="contenido" rows="5" required></textarea>
+
+        <input type="hidden" name="estado" value="activo">
+
+        <button type="submit">Guardar citación</button>
+    </form>
+</div>
+
+</body>
+</html>

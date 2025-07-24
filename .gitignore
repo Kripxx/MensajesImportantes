@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Entornos virtuales
+.venv/
+venv/
+
+# PyCharm
+.idea/
+
+# Archivos sensibles
+.env
+*.secret
