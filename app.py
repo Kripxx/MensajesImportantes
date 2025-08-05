@@ -40,9 +40,11 @@ def formulario():
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
 
-    cursor.execute("SELECT area_id, nombre FROM areas")
+    # areas: columna PK es 'id'
+    cursor.execute("SELECT id AS area_id, nombre FROM areas")
     areas = cursor.fetchall()
 
+    # motivos: columna PK es 'motivo_id'
     cursor.execute("SELECT motivo_id, nombre FROM motivos")
     motivos = cursor.fetchall()
 
@@ -63,17 +65,17 @@ def guardar():
     conexion = obtener_conexion()
     cursor = conexion.cursor(dictionary=True)
 
-    # 🔍 Obtener nombre del área
-    cursor.execute("SELECT nombre FROM areas WHERE area_id = %s", (area_id,))
+    # Obtener nombre área usando 'id'
+    cursor.execute("SELECT nombre FROM areas WHERE id = %s", (area_id,))
     area = cursor.fetchone()
     nombre_area = area['nombre'] if area else "No especificado"
 
-    # 🔍 Obtener nombre del motivo
+    # Obtener nombre motivo usando 'motivo_id'
     cursor.execute("SELECT nombre FROM motivos WHERE motivo_id = %s", (motivo_id,))
     motivo = cursor.fetchone()
     nombre_motivo = motivo['nombre'] if motivo else "No especificado"
 
-    # 💾 Guardar en base de datos
+    # Guardar en tabla citaciones
     sql = '''
         INSERT INTO citaciones (area_id, motivo_id, asunto, contenido, estado)
         VALUES (%s, %s, %s, %s, %s)
@@ -83,7 +85,9 @@ def guardar():
     cursor.close()
     conexion.close()
 
-    # 📨 Armar contenido en HTML para el correo
+    # Convertir saltos de línea a <br>
+    contenido_convertido = contenido.replace('\n', '<br>')
+
     contenido_correo_html = f"""
     <html>
         <body>
@@ -91,7 +95,7 @@ def guardar():
             <p><strong>Motivo:</strong> {nombre_motivo}</p>
             <hr>
             <p><strong>Mensaje:</strong></p>
-            <p>{contenido.replace('\n', '<br>')}</p>
+            <p>{contenido_convertido}</p>
         </body>
     </html>
     """

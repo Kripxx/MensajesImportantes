@@ -1,18 +1,19 @@
 <?php
-$host = "localhost";
+$host = "crossover.proxy.rlwy.net";
+$port = 27645;
 $user = "root";
-$password = "rott";
-$database = "mi";
+$password = "QZfJLpAfqssdkkNaRuvyvIEWQKwkdsrn";  // la contraseña que mencionaste
+$database = "railway";
 
 $conn = new mysqli($host, $user, $password, $database);
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
 
-// Obtener áreas
-$areas = $conn->query("SELECT area_id, nombre FROM areas");
+// Para areas, la columna se llama "id"
+$areas = $conn->query("SELECT id AS area_id, nombre FROM areas");
 
-// Obtener motivos
+// Para motivos, la columna se llama "motivo_id" (ya está bien)
 $motivos = $conn->query("SELECT motivo_id, nombre FROM motivos");
 ?>
 
